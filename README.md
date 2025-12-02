@@ -1,6 +1,6 @@
 ### Scanify
 
-Stockist
+Stockist and Scheme Management System
 
 ### Installation
 
