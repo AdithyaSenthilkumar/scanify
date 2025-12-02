@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "creation": "2025-11-29 08:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "approver",
+  "approval_level",
+  "action",
+  "action_date",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "approver",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Approver",
+   "options": "User"
+  },
+  {
+   "fieldname": "approval_level",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Level"
+  },
+  {
+   "fieldname": "action",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Action",
+   "options": "Approved\nRejected\nRerouted"
+  },
+  {
+   "fieldname": "action_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-12-01 09:20:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Scheme Approval Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

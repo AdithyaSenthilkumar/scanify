@@ -1,0 +1,112 @@
+{
+ "app": "scanify",
+ "charts": [],
+ "content": "[{\"id\":\"C6ZHn6BzNS\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Configure core business entities and hierarchies</span>\",\"col\":12}},{\"id\":\"i080mjIaXt\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b><i>Quick Links</i></b>\",\"col\":12}},{\"id\":\"XL_OrYmfBS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795 New Product\",\"col\":4}},{\"id\":\"EtVYUont92\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795New Stockist\",\"col\":4}},{\"id\":\"vcEiBF8uJZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795New Doctor\",\"col\":4}},{\"id\":\"yj2UEqVePG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795 New HQ\",\"col\":4}},{\"id\":\"4dkDGIODVB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795 New Region\",\"col\":4}},{\"id\":\"Ka8V70MRTW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795 New Team\",\"col\":4}},{\"id\":\"ERE1SqorcY\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"uWtGp1gYBs\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Products\",\"col\":4}},{\"id\":\"d6Peomv3QH\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Stockists\",\"col\":4}},{\"id\":\"pLoweJJGkX\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Doctors\",\"col\":4}},{\"id\":\"Ezw6lyGdqn\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"HQs\",\"col\":4}},{\"id\":\"bGdA0Q5qVi\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Regions\",\"col\":4}},{\"id\":\"R5SOqS0dEi\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Teams\",\"col\":4}}]",
+ "creation": "2025-11-30 12:35:37.323535",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "chart",
+ "idx": 2,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Masters",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2025-12-01 08:24:58.656015",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Masters",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "Scanify",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Product Master",
+   "label": "Products",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "Stockist Master",
+   "label": "Stockists",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "Doctor Master",
+   "label": "Doctors",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "HQ Master",
+   "label": "HQs",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "Region Master",
+   "label": "Regions",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "Team Master",
+   "label": "Teams",
+   "quick_list_filter": "[]"
+  }
+ ],
+ "roles": [],
+ "sequence_id": 31.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795 New Product",
+   "link_to": "Product Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795New Stockist",
+   "link_to": "Stockist Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795New Doctor",
+   "link_to": "Doctor Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795 New HQ",
+   "link_to": "HQ Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795 New Region",
+   "link_to": "Region Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u2795 New Team",
+   "link_to": "Team Master",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Masters",
+ "type": "Workspace"
+}

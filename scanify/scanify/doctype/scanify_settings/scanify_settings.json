@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "creation": "2025-11-29 07:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company_details",
+  "company_name",
+  "company_logo",
+  "column_break_xyzt",
+  "enable_gemini",
+  "gemini_api_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "company_details",
+   "fieldtype": "Section Break",
+   "label": "Company Details"
+  },
+  {
+   "default": "Stedman Pharmaceuticals",
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name"
+  },
+  {
+   "fieldname": "company_logo",
+   "fieldtype": "Attach Image",
+   "label": "Company Logo"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_gemini",
+   "fieldtype": "Check",
+   "label": "Enable Gemini AI Extraction"
+  },
+  {
+   "depends_on": "eval:doc.enable_gemini==1",
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Password",
+   "label": "Gemini API Key"
+  },
+  {
+   "fieldname": "column_break_xyzt",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-11-29 07:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Scanify Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

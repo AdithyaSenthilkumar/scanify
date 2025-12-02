@@ -1,0 +1,13 @@
+{
+ "name": "Scanify",
+ "app_name": "scanify",
+ "category": "Modules",
+ "label": "Scanify",
+ "color": "#3498db",
+ "icon": "fa fa-barcode",
+ "description": "Stockist Entry and Scheme Management System for Stedman Pharmaceuticals",
+ "type": "module",
+ "hidden": 0,
+ "module_name": "Scanify",
+ "restrict_to_domain": ""
+}

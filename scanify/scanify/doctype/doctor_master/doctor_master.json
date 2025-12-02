@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:doctor_code",
+ "creation": "2025-11-28 22:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "doctor_code",
+  "doctor_name",
+  "place",
+  "column_break_qzwu",
+  "city_pool",
+  "team",
+  "region",
+  "section_break_jxbq",
+  "specialization",
+  "phone",
+  "column_break_ysbu",
+  "hospital_clinic",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "doctor_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Doctor Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "doctor_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Doctor Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "place",
+   "fieldtype": "Data",
+   "label": "Place"
+  },
+  {
+   "fieldname": "city_pool",
+   "fieldtype": "Data",
+   "label": "City Pool"
+  },
+  {
+   "fieldname": "team",
+   "fieldtype": "Link",
+   "label": "Team",
+   "options": "Team Master"
+  },
+  {
+   "fieldname": "region",
+   "fieldtype": "Link",
+   "label": "Region",
+   "options": "Region Master"
+  },
+  {
+   "fieldname": "specialization",
+   "fieldtype": "Data",
+   "label": "Specialization"
+  },
+  {
+   "fieldname": "hospital_clinic",
+   "fieldtype": "Data",
+   "label": "Hospital/Clinic"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive"
+  },
+  {
+   "fieldname": "column_break_qzwu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_jxbq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ysbu",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-28 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Doctor Master",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

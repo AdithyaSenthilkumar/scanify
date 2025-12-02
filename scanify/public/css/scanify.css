@@ -1,0 +1,185 @@
+/* Scanify Custom Styles */
+
+/* Hide default Frappe branding */
+.navbar-brand {
+    display: none !important;
+}
+
+/* Custom sidebar styling */
+.scanify-sidebar {
+    position: fixed;
+    left: 0;
+    top: 50px;
+    width: 250px;
+    height: calc(100vh - 50px);
+    background: #2c3e50;
+    color: #ecf0f1;
+    z-index: 999;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.scanify-sidebar-header {
+    padding: 20px 15px;
+    background: #34495e;
+    border-bottom: 1px solid #1a252f;
+    text-align: center;
+}
+
+.scanify-sidebar-logo {
+    max-width: 180px;
+    max-height: 60px;
+    margin-bottom: 10px;
+}
+
+.scanify-sidebar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.scanify-sidebar-nav {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.scanify-sidebar-section {
+    padding: 15px 0;
+    border-bottom: 1px solid #34495e;
+}
+
+.scanify-sidebar-section-title {
+    padding: 8px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #95a5a6;
+    letter-spacing: 0.5px;
+}
+
+.scanify-sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.scanify-sidebar-link:hover {
+    background: #34495e;
+    color: #3498db;
+    border-left-color: #3498db;
+    text-decoration: none;
+}
+
+.scanify-sidebar-link.active {
+    background: #34495e;
+    color: #fff;
+    border-left-color: #3498db;
+}
+
+.scanify-sidebar-icon {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.scanify-main-content {
+    margin-left: 250px;
+    padding: 20px;
+    min-height: calc(100vh - 50px);
+}
+
+/* Dashboard cards */
+.scanify-dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.scanify-dashboard-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.scanify-dashboard-card-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.scanify-dashboard-card-subtitle {
+    font-size: 12px;
+    color: #95a5a6;
+    margin-top: 5px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .scanify-sidebar {
+        transform: translateX(-250px);
+        transition: transform 0.3s ease;
+    }
+    
+    .scanify-sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .scanify-main-content {
+        margin-left: 0;
+    }
+}
+
+/* Stats cards */
+.stat-card {
+    text-align: center;
+    padding: 25px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.stat-card.blue {
+    border-top: 4px solid #3498db;
+}
+
+.stat-card.green {
+    border-top: 4px solid #27ae60;
+}
+
+.stat-card.orange {
+    border-top: 4px solid #f39c12;
+}
+
+.stat-card.red {
+    border-top: 4px solid #e74c3c;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

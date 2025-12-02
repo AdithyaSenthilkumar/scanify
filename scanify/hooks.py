@@ -1,252 +1,82 @@
 app_name = "scanify"
 app_title = "Scanify"
-app_publisher = "mit"
-app_description = "Stockist"
-app_email = "admin@scanify.com"
+app_publisher = "Stedman Pharmaceuticals"
+app_description = "Stockist Entry and Scheme Management System"
+app_email = "admin@stedman.com"
 app_license = "mit"
 
-# Apps
-# ------------------
+# Include CSS and JS
+app_include_css = "/assets/scanify/css/scanify.css"
+app_include_js = "/assets/scanify/js/scanify.js"
 
-# required_apps = []
+# Workspace and branding
+website_context = {
+    "brand_html": "<img src='/assets/scanify/images/stedman_logo.png' style='max-height: 40px;' />"
+}
 
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "scanify",
-# 		"logo": "/assets/scanify/logo.png",
-# 		"title": "Scanify",
-# 		"route": "/scanify",
-# 		"has_permission": "scanify.api.permission.has_app_permission"
-# 	}
-# ]
+# Default home page after login
+website_route_rules = [
+    {"from_route": "/desk", "to_route": "/app/scanify_dashboard"}
+]
 
-# Includes in <head>
-# ------------------
+# Redirect after login
+on_session_creation = "scanify.auth.on_session_creation"
 
-# include js, css files in header of desk.html
-# app_include_css = "/assets/scanify/css/scanify.css"
-# app_include_js = "/assets/scanify/js/scanify.js"
+# Document hooks
+doc_events = {
+    "Stockist Statement": {
+        "validate": "scanify.scanify.doctype.stockist_statement.stockist_statement.validate_closing_balance",
+        "on_submit": "scanify.scanify.doctype.stockist_statement.stockist_statement.update_next_month_opening"
+    },
+    "Scheme Request": {
+        "on_submit": "scanify.scanify.doctype.scheme_request.scheme_request.create_stock_adjustment"
+    }
+}
 
-# include js, css files in header of web template
-# web_include_css = "/assets/scanify/css/scanify.css"
-# web_include_js = "/assets/scanify/js/scanify.js"
+# Boot session
+boot_session = "scanify.boot.boot_session"
 
-# include custom scss in every website theme (without file extension ".scss")
-# website_theme_scss = "scanify/public/scss/website"
+fixtures = [
+    # Export UI-built workspaces
+    {
+        "dt": "Workspace",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# include js, css files in header of web form
-# webform_include_js = {"doctype": "public/js/doctype.js"}
-# webform_include_css = {"doctype": "public/css/doctype.css"}
+    # Export dashboard charts used in Workspace
+    {
+        "dt": "Dashboard Chart",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# include js in page
-# page_js = {"page" : "public/js/file.js"}
+    # Export custom fields of your doctypes
+    {
+        "dt": "Custom Field",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
-# doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
-# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+    # Export changes in field properties (like label, required, etc.)
+    {
+        "dt": "Property Setter",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# Svg Icons
-# ------------------
-# include app icons in desk
-# app_include_icons = "scanify/public/icons.svg"
+    # Export reports you create for charts and lists
+    {
+        "dt": "Report",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# Home Pages
-# ----------
+    # Export any custom client-side code written in UI
+    {
+        "dt": "Client Script",
+        "filters": [["module", "in", ["Scanify"]]]
+    },
 
-# application home page (will override Website Settings)
-# home_page = "login"
-
-# website user home page (by Role)
-# role_home_page = {
-# 	"Role": "home_page"
-# }
-
-# Generators
-# ----------
-
-# automatically create page for each record of this doctype
-# website_generators = ["Web Page"]
-
-# automatically load and sync documents of this doctype from downstream apps
-# importable_doctypes = [doctype_1]
-
-# Jinja
-# ----------
-
-# add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "scanify.utils.jinja_methods",
-# 	"filters": "scanify.utils.jinja_filters"
-# }
-
-# Installation
-# ------------
-
-# before_install = "scanify.install.before_install"
-# after_install = "scanify.install.after_install"
-
-# Uninstallation
-# ------------
-
-# before_uninstall = "scanify.uninstall.before_uninstall"
-# after_uninstall = "scanify.uninstall.after_uninstall"
-
-# Integration Setup
-# ------------------
-# To set up dependencies/integrations with other apps
-# Name of the app being installed is passed as an argument
-
-# before_app_install = "scanify.utils.before_app_install"
-# after_app_install = "scanify.utils.after_app_install"
-
-# Integration Cleanup
-# -------------------
-# To clean up dependencies/integrations with other apps
-# Name of the app being uninstalled is passed as an argument
-
-# before_app_uninstall = "scanify.utils.before_app_uninstall"
-# after_app_uninstall = "scanify.utils.after_app_uninstall"
-
-# Desk Notifications
-# ------------------
-# See frappe.core.notifications.get_notification_config
-
-# notification_config = "scanify.notifications.get_notification_config"
-
-# Permissions
-# -----------
-# Permissions evaluated in scripted ways
-
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
-#
-# has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
-# }
-
-# Document Events
-# ---------------
-# Hook on document methods and events
-
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
-
-# Scheduled Tasks
-# ---------------
-
-# scheduler_events = {
-# 	"all": [
-# 		"scanify.tasks.all"
-# 	],
-# 	"daily": [
-# 		"scanify.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"scanify.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"scanify.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"scanify.tasks.monthly"
-# 	],
-# }
-
-# Testing
-# -------
-
-# before_tests = "scanify.install.before_tests"
-
-# Extend DocType Class
-# ------------------------------
-#
-# Specify custom mixins to extend the standard doctype controller.
-# extend_doctype_class = {
-# 	"Task": "scanify.custom.task.CustomTaskMixin"
-# }
-
-# Overriding Methods
-# ------------------------------
-#
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "scanify.event.get_events"
-# }
-#
-# each overriding function accepts a `data` argument;
-# generated from the base implementation of the doctype dashboard,
-# along with any modifications made in other Frappe apps
-# override_doctype_dashboards = {
-# 	"Task": "scanify.task.get_dashboard_data"
-# }
-
-# exempt linked doctypes from being automatically cancelled
-#
-# auto_cancel_exempted_doctypes = ["Auto Repeat"]
-
-# Ignore links to specified DocTypes when deleting documents
-# -----------------------------------------------------------
-
-# ignore_links_on_delete = ["Communication", "ToDo"]
-
-# Request Events
-# ----------------
-# before_request = ["scanify.utils.before_request"]
-# after_request = ["scanify.utils.after_request"]
-
-# Job Events
-# ----------
-# before_job = ["scanify.utils.before_job"]
-# after_job = ["scanify.utils.after_job"]
-
-# User Data Protection
-# --------------------
-
-# user_data_fields = [
-# 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
-# 		"partial": 1,
-# 	},
-# 	{
-# 		"doctype": "{doctype_3}",
-# 		"strict": False,
-# 	},
-# 	{
-# 		"doctype": "{doctype_4}"
-# 	}
-# ]
-
-# Authentication and authorization
-# --------------------------------
-
-# auth_hooks = [
-# 	"scanify.auth.validate"
-# ]
-
-# Automatically update python controller files with type annotations for this app.
-# export_python_type_annotations = True
-
-# default_log_clearing_doctypes = {
-# 	"Logging DocType Name": 30  # days to retain logs
-# }
-
-# Translation
-# ------------
-# List of apps whose translatable strings should be excluded from this app's translations.
-# ignore_translatable_strings_from = []
+    # Export pages (if you use desk pages)
+    {
+        "dt": "Page",
+        "filters": [["module", "in", ["Scanify"]]]
+    }
+]
 

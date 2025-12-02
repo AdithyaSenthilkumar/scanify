@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "creation": "2025-11-29 08:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "product_code",
+  "product_name",
+  "pack",
+  "column_break_1",
+  "quantity",
+  "free_quantity",
+  "product_rate",
+  "special_rate",
+  "product_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product Code",
+   "options": "Product Master",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "product_code.product_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Product Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.pack",
+   "fieldname": "pack",
+   "fieldtype": "Data",
+   "label": "Pack Size",
+   "read_only": 1
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Order Quantity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "free_quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Free Quantity",
+   "default": "0"
+  },
+  {
+   "fetch_from": "product_code.pts",
+   "fieldname": "product_rate",
+   "fieldtype": "Currency",
+   "label": "Product Rate (PTS)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "special_rate",
+   "fieldtype": "Currency",
+   "label": "Special Rate (if any)"
+  },
+  {
+   "fieldname": "product_value",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-12-01 09:20:00.000000",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Scheme Request Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
