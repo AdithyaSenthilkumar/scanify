@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:SD-{####}",
+ "creation": "2025-12-26 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_1",
+  "scheme_request",
+  "scheme_date",
+  "doctor_code",
+  "column_break_scheme",
+  "stockist_statement",
+  "stockist_code",
+  "column_break_2",
+  "deduction_date",
+  "status",
+  "section_break_products",
+  "items",
+  "section_break_totals",
+  "total_deducted_qty",
+  "column_break_total",
+  "total_deducted_value",
+  "section_break_notes",
+  "notes",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Scheme Deduction Details"
+  },
+  {
+   "fieldname": "scheme_request",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Scheme Request",
+   "options": "Scheme Request",
+   "reqd": 1
+  },
+  {
+   "depends_on": "scheme_request",
+   "fetch_from": "scheme_request.application_date",
+   "fieldname": "scheme_date",
+   "fieldtype": "Date",
+   "label": "Scheme Date",
+   "read_only": 1
+  },
+  {
+   "depends_on": "scheme_request",
+   "fetch_from": "scheme_request.doctor_code",
+   "fieldname": "doctor_code",
+   "fieldtype": "Link",
+   "label": "Doctor",
+   "options": "Doctor Master",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_scheme",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stockist_statement",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Stockist Statement",
+   "options": "Stockist Statement",
+   "reqd": 1
+  },
+  {
+   "depends_on": "scheme_request",
+   "fetch_from": "scheme_request.stockist_code",
+   "fieldname": "stockist_code",
+   "fieldtype": "Link",
+   "label": "Stockist",
+   "options": "Stockist Master",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "deduction_date",
+   "fieldtype": "Date",
+   "label": "Deduction Date",
+   "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nApplied\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_products",
+   "fieldtype": "Section Break",
+   "label": "Products to Deduct"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Scheme Items",
+   "options": "Scheme Deduction Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_deducted_qty",
+   "fieldtype": "Float",
+   "label": "Total Deducted Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_total",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_deducted_value",
+   "fieldtype": "Currency",
+   "label": "Total Deducted Value (PTS)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Deduction Notes"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Scheme Deduction",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-12-26 17:00:00",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Scheme Deduction",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

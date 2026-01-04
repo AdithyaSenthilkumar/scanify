@@ -67,6 +67,9 @@ frappe.ui.form.on('Scheme Request', {
         
         // Add custom CSS for history buttons in grid
         add_grid_history_buttons(frm);
+        // ==== NEW PRODUCT DETECTION FOR REPEAT REQUESTS ====
+
+
     },
     
     onload: function(frm) {
@@ -93,7 +96,7 @@ frappe.ui.form.on('Scheme Request', {
     doctor_code: function(frm) {
         if (frm.doc.doctor_code) {
             frappe.db.get_value('Doctor Master', frm.doc.doctor_code, 
-                ['doctor_name', 'place', 'city_pool', 'team', 'region', 'specialization', 'hospital_clinic'], 
+                ['doctor_name', 'place', 'city_pool', 'team', 'region', 'specialization', 'hospital_address'], 
                 (r) => {
                     if (r) {
                         frm.set_value('doctor_name', r.doctor_name);
@@ -102,16 +105,14 @@ frappe.ui.form.on('Scheme Request', {
                         frm.set_value('team', r.team);
                         frm.set_value('region', r.region);
                         frm.set_value('specialization', r.specialization);
-                        frm.set_value('hospital_clinic', r.hospital_clinic);
+                        frm.set_value('hospital_address', r.hospital_address);
                     }
             });
-                        check_doctor_monthly_limit(frm);
 
         }
     },
         application_date: function(frm) {
         if (frm.doc.doctor_code && frm.doc.application_date) {
-            check_doctor_monthly_limit(frm);
         }
     },
     
@@ -173,84 +174,43 @@ frappe.ui.form.on('Scheme Request', {
 });
 
 frappe.ui.form.on('Scheme Request Item', {
+    productcode: function(frm, cdt, cdn) {
+        let row = locals[cdt][cdn];
+        if (row.productcode) {
+            frappe.db.get_value('Product Master', row.product_code, ['product_name', 'pack', 'pts'], (r) => {
+                frappe.model.set_value(cdt, cdn, 'product_name', r.product_name);
+                frappe.model.set_value(cdt, cdn, 'pack', r.pack);
+                frappe.model.set_value(cdt, cdn, 'product_rate', r.pts);
+            });
+            frm.refresh_field('items');
+            //calculate_total(frm);
+
+        }
+    },
+    
     quantity: function(frm, cdt, cdn) {
-        calculate_item_value(frm, cdt, cdn);
+        calculateitemvalue(frm, cdt, cdn);
+    },
+    
+    free_quantity: function(frm, cdt, cdn) {
+        calculateitemvalue(frm, cdt, cdn);
     },
     
     special_rate: function(frm, cdt, cdn) {
-        calculate_item_value(frm, cdt, cdn);
+        calculateitemvalue(frm, cdt, cdn);
     },
     
-    product_code: function(frm, cdt, cdn) {
-        let row = locals[cdt][cdn];
-        if (row.product_code) {
-            frappe.db.get_value('Product Master', row.product_code, 
-                ['product_name', 'pack', 'pts'], (r) => {
-                    frappe.model.set_value(cdt, cdn, 'product_name', r.product_name);
-                    frappe.model.set_value(cdt, cdn, 'pack', r.pack);
-                    frappe.model.set_value(cdt, cdn, 'product_rate', r.pts);
-                    
-                    // Refresh grid to show history button
-                    frm.refresh_field('items');
-            });
-        }
+    product_rate: function(frm, cdt, cdn) {
+        // Also trigger when product rate is set/changed
+        calculateitemvalue(frm, cdt, cdn);
     },
     
-    // Add history button when row is rendered
     items_add: function(frm, cdt, cdn) {
-        setTimeout(() => {
-            add_grid_history_buttons(frm);
-        }, 300);
+        setTimeout(() => add_grid_history_buttons(frm), 300);
     }
 });
-function check_doctor_monthly_limit(frm) {
-    if (!frm.doc.doctor_code) return;
-    
-    frappe.call({
-        method: 'scanify.scanify.doctype.scheme_request.scheme_request.get_doctor_monthly_count',
-        args: {
-            doctor_code: frm.doc.doctor_code,
-            application_date: frm.doc.application_date || frappe.datetime.nowdate()
-        },
-        callback: function(r) {
-            if (r.message && r.message.success) {
-                let data = r.message;
-                let indicator = 'blue';
-                let message = `${data.count} of ${data.limit} requests used for ${data.month}`;
-                
-                if (data.remaining === 0) {
-                    indicator = 'red';
-                    message = `⚠️ Limit reached: ${data.count}/${data.limit} requests for ${data.month}`;
-                } else if (data.remaining === 1) {
-                    indicator = 'orange';
-                    message = `⚠️ ${data.remaining} slot remaining for ${data.month} (${data.count}/${data.limit} used)`;
-                } else {
-                    indicator = 'green';
-                    message = `${data.remaining} slots remaining for ${data.month} (${data.count}/${data.limit} used)`;
-                }
-                
-                frm.dashboard.set_headline_alert(message, indicator);
-                
-                // Show persistent message if limit reached
-                if (data.remaining === 0 && frm.is_new()) {
-                    frappe.msgprint({
-                        title: __('Monthly Limit Reached'),
-                        message: __('Doctor <b>{0}</b> already has {1} scheme requests in {2}. Maximum 3 requests allowed per doctor per month.', 
-                            [frm.doc.doctor_name, data.count, data.month]),
-                        indicator: 'red',
-                        primary_action: {
-                            label: 'Clear Doctor',
-                            action: function() {
-                                frm.set_value('doctor_code', '');
-                                frm.set_value('doctor_name', '');
-                            }
-                        }
-                    });
-                }
-            }
-        }
-    });
-}
+
+
 
 // ==================== NEW: REPEAT REQUEST ====================
 
@@ -355,7 +315,12 @@ frappe.ui.form.on('Scheme Request', {
             
             frm.add_custom_button(__('View Product History'), function() {
                 show_product_selection_dialog(frm);
-            }, __('Reports'));
+            }, __('History'));
+             frm.add_custom_button(__("View Doctor History"), function() {
+                    show_Doctor_History_Dialog(frm, frm.doc.doctor_code);
+                }, __("History"));
+            // Add "View Doctor History" button in Reports menu
+
         }
     }
 });
@@ -429,9 +394,12 @@ function show_product_history_dialog(frm, product_code) {
                 
                 // Render charts if data available
                 if (data.chart_data && data.chart_data.length > 0) {
-                    setTimeout(() => {
-                        render_product_history_chart(data.chart_data, 'product-history-chart');
-                    }, 100);
+                    d.$wrapper.on('shown.bs.modal', function() {
+                        setTimeout(() => {
+                            render_product_history_chart(data.chart_data, 'product-history-chart');
+                        }, 150);
+                    });
+
                 }
             } else {
                 d.fields_dict.loading.$wrapper.html(
@@ -528,15 +496,33 @@ function generate_product_history_html(data) {
 
 // Render chart using Frappe Charts
 function render_product_history_chart(chart_data, container_id) {
+    // No data
     if (!chart_data || chart_data.length === 0) {
-        $(`#${container_id}`).html('<p class="text-center text-muted" style="padding: 40px;">No chart data available</p>');
+        $(`#${container_id}`).html(`
+            <p class="text-center text-muted" style="padding: 40px;">
+                No chart data available
+            </p>
+        `);
         return;
     }
-    
-    let labels = chart_data.map(d => d.month);
-    let quantities = chart_data.map(d => d.quantity);
-    let values = chart_data.map(d => d.value);
-    
+
+    // Ensure container width is available (dialog fully rendered)
+    let w = $(`#${container_id}`).width();
+    if (!w || w < 50) {
+        setTimeout(() => render_product_history_chart(chart_data, container_id), 200);
+        return;
+    }
+
+    // Filter out invalid rows
+    chart_data = chart_data.filter(d => d && d.month);
+
+    // Extract normalized values
+    let labels = chart_data.map(d => d.month || "N/A");
+    let quantities = chart_data.map(d => flt(d.quantity || 0));
+    let values = chart_data.map(d => flt(d.value || 0));
+    $(`#${container_id}`).html("");
+
+
     new frappe.Chart(`#${container_id}`, {
         title: "Monthly Trend",
         data: {
@@ -545,20 +531,21 @@ function render_product_history_chart(chart_data, container_id) {
                 {
                     name: "Quantity",
                     values: quantities,
-                    chartType: 'bar'
+                    chartType: "bar"
                 },
                 {
                     name: "Value (₹)",
                     values: values,
-                    chartType: 'line'
+                    chartType: "line"
                 }
             ]
         },
-        type: 'axis-mixed',
+        type: "axis-mixed",
         height: 280,
-        colors: ['#5e64ff', '#28a745']
+        colors: ["#5e64ff", "#28a745"]
     });
 }
+
 
 function get_status_color(status) {
     const colors = {
@@ -637,14 +624,37 @@ function show_doctor_search_dialog(frm) {
     
     d.show();
 }
-
-function calculate_item_value(frm, cdt, cdn) {
+function calculateitemvalue(frm, cdt, cdn) {
     let row = locals[cdt][cdn];
-    let rate = row.special_rate ? flt(row.special_rate) : flt(row.product_rate);
-    let value = flt(row.quantity) * rate;
-    frappe.model.set_value(cdt, cdn, 'product_value', value);
+    
+    let qty = flt(row.quantity) || 0;
+    let free_qty = flt(row.free_quantity) || 0;
+    let product_rate = flt(row.product_rate) || 0;
+    let special_rate = flt(row.special_rate) || 0;
+
+    let scheme_pct = 0;
+
+    // special rate scheme
+    if (special_rate > 0 && product_rate > 0) {
+        scheme_pct = ((product_rate - special_rate) / product_rate) * 100;
+    }
+    // free quantity scheme
+    else if (free_qty > 0 && qty > 0) {
+        scheme_pct = (free_qty / qty) * 100;
+    }
+
+    frappe.model.set_value(cdt, cdn, "scheme_percentage", scheme_pct);
+
+    // calculate line value
+    let rate = special_rate > 0 ? special_rate : product_rate;
+    frappe.model.set_value(cdt, cdn, "product_value", qty * rate);
+
+    frm.refresh_field("items");
     calculate_total(frm);
 }
+
+
+
 
 function calculate_total(frm) {
     let total = 0;
@@ -769,5 +779,230 @@ function show_all_attachments(frm) {
         title: __('Attached Documents'),
         message: html,
         wide: true
+    });
+}
+// Show doctor historical data with charts
+function show_Doctor_History_Dialog(frm, doctor_code) {
+    if (!doctor_code) {
+        frappe.msgprint(__("Please select a doctor first"));
+        return;
+    }
+    
+    let d = new frappe.ui.Dialog({
+        title: `Doctor History: ${frm.doc.doctor_name || doctor_code}`,
+        size: 'extra-large',
+        fields: [
+            {
+                fieldname: 'loading',
+                fieldtype: 'HTML'
+            }
+        ]
+    });
+    
+    d.fields_dict.loading.$wrapper.html(`
+        <div class="text-center" style="padding: 40px;">
+            <i class="fa fa-spinner fa-spin fa-3x text-muted"></i>
+            <p style="margin-top: 20px; font-size: 14px;">Loading doctor history...</p>
+        </div>
+    `);
+    
+    d.show();
+    
+    // Fetch doctor history
+    frappe.call({
+        method: 'scanify.api.get_doctor_history_for_scheme',
+        args: {
+            doctor_code: doctor_code,
+            hq: frm.doc.hq
+        },
+        callback: function(r) {
+            if (r.message && r.message.success) {
+                let data = r.message;
+                let html = generate_Doctor_History_Html(data);
+                d.fields_dict.loading.$wrapper.html(html);
+                
+                // Render charts if data available
+                if (data.chart_data && data.chart_data.length > 0) {
+                    d.$wrapper.on('shown.bs.modal', function() {
+                        setTimeout(() => {
+                            render_Doctor_History_Chart(data.chart_data, '#doctor-history-chart');
+                        }, 150);
+                    });
+                }
+            } else {
+                d.fields_dict.loading.$wrapper.html(`
+                    <div class="alert alert-warning">No historical data found for this doctor</div>
+                `);
+            }
+        },
+        error: function(err) {
+            d.fields_dict.loading.$wrapper.html(`
+                <div class="alert alert-danger">Error loading data. Please try again.</div>
+            `);
+        }
+    });
+}
+
+// Generate HTML for doctor history
+function generate_Doctor_History_Html(data) {
+    let html = `
+        <div class="doctor-history-container" style="padding: 15px;">
+            <!-- Doctor Details -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fa fa-user-md"></i> Doctor Details</h5>
+                    <table class="table table-bordered">
+                        <tr><th width="40%">Doctor Code</th><td><strong>${data.doctor_code || '-'}</strong></td></tr>
+                        <tr><th>Doctor Name</th><td><strong>${data.doctor_name || '-'}</strong></td></tr>
+                        <tr><th>Place</th><td>${data.place}</td></tr>
+                        <tr><th>Specialization</th><td>${data.specialization}</td></tr>
+                        <tr><th>Hospital/Clinic</th><td>${data.hospital_address}</td></tr>
+                        <tr><th>City Pool</th><td>${data.city_pool}</td></tr>
+                    </table>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5><i class="fa fa-bar-chart"></i> Historical Summary (Last 12 Months)</h5>
+                    <table class="table table-bordered">
+                        <tr><th width="50%">Total Schemes</th><td><strong>${data.total_schemes || 0}</strong></td></tr>
+                        <tr><th>Approved</th><td><span class="indicator green">${data.total_approved || 0}</span></td></tr>
+                        <tr><th>Pending</th><td><span class="indicator orange">${data.total_pending || 0}</span></td></tr>
+                        <tr><th>Rejected</th><td><span class="indicator red">${data.total_rejected || 0}</span></td></tr>
+                        <tr><th>Total Value</th><td><strong>₹${flt(data.total_value).toFixed(2)}</strong></td></tr>
+                        <tr><th>Last Scheme Date</th><td>${data.last_scheme_date || 'Never'}</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Monthly Trend Chart -->
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-12">
+                    <h5><i class="fa fa-line-chart"></i> Monthly Scheme Trend (Last 6 Months)</h5>
+                    <div id="doctor-history-chart" style="height: 300px; border: 1px solid #ddd; border-radius: 4px; padding: 10px;"></div>
+                </div>
+            </div>
+            
+            <!-- Top Products -->
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-12">
+                    <h5><i class="fa fa-cubes"></i> Top Products (Approved Schemes)</h5>
+                    <div style="max-height: 250px; overflow-y: auto;">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead style="background-color: #f5f5f5;">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Free Qty</th>
+                                    <th>Value</th>
+                                    <th>Schemes</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+    
+    if (data.product_summary && data.product_summary.length > 0) {
+        data.product_summary.forEach(product => {
+            html += `
+                <tr>
+                    <td><strong>${product.product_name || '-'}</strong><br><small>${product.product_code}</small></td>
+                    <td>${product.total_quantity || 0}</td>
+                    <td>${product.total_free_quantity || 0}</td>
+                    <td>₹${flt(product.total_value).toFixed(2)}</td>
+                    <td>${product.scheme_count}</td>
+                </tr>`;
+        });
+    } else {
+        html += `<tr><td colspan="5" class="text-center text-muted">No approved products found</td></tr>`;
+    }
+    
+    html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Scheme Requests -->
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-md-12">
+                    <h5><i class="fa fa-list"></i> Recent Scheme Requests</h5>
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead style="background-color: #f5f5f5;">
+                                <tr>
+                                    <th>Scheme ID</th>
+                                    <th>Date</th>
+                                    <th>Stockist</th>
+                                    <th>HQ</th>
+                                    <th>Products</th>
+                                    <th>Value</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+    
+    if (data.recent_schemes && data.recent_schemes.length > 0) {
+        data.recent_schemes.forEach(scheme => {
+            html += `
+                <tr>
+                    <td><a href="/app/scheme-request/${scheme.name}" target="_blank">${scheme.name}</a></td>
+                    <td>${frappe.datetime.str_to_user(scheme.application_date)}</td>
+                    <td>${scheme.stockist_name || '-'}</td>
+                    <td>${scheme.hq || '-'}</td>
+                    <td>${scheme.product_count || 0}</td>
+                    <td>₹${flt(scheme.total_scheme_value).toFixed(2)}</td>
+                    <td><span class="indicator ${get_status_color(scheme.approval_status)}">${scheme.approval_status}</span></td>
+                </tr>`;
+        });
+    } else {
+        html += `<tr><td colspan="7" class="text-center text-muted">No recent schemes found</td></tr>`;
+    }
+    
+    html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    return html;
+}
+
+// Render chart using Frappe Charts
+function render_Doctor_History_Chart(chart_Data, container_Id) {
+    if (!chart_Data || chart_Data.length === 0) {
+        $(container_Id).html('<p class="text-center text-muted" style="padding: 40px;">No chart data available</p>');
+        return;
+    }
+
+    // Ensure container is fully rendered
+    let w = $(container_Id).width();
+    if (!w || w < 50) {
+        setTimeout(() => render_Doctor_History_Chart(chart_Data, container_Id), 200);
+        return;
+    }
+
+    // Remove undefined rows
+    chart_Data = chart_Data.filter(d => d && d.month);
+
+    let labels = chart_Data.map(d => d.month || "N/A");
+    let scheme_Counts = chart_Data.map(d => flt(d.scheme_count || 0));
+    let values = chart_Data.map(d => flt(d.total_value || 0));
+    $(container_Id).html("");
+
+
+    new frappe.Chart(container_Id, {
+        title: "Monthly Scheme Activity",
+        data: {
+            labels: labels,
+            datasets: [
+                { name: "Scheme Count", values: scheme_Counts, chartType: 'bar' },
+                { name: "Total Value (₹)", values: values, chartType: 'line' }
+            ]
+        },
+        type: "axis-mixed",
+        height: 280,
+        colors: ["#5e64ff", "#28a745"]
     });
 }

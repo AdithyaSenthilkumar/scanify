@@ -1,0 +1,49 @@
+{
+ "app": "scanify",
+ "charts": [
+  {
+   "chart_name": "Product master",
+   "label": "Trend of Products"
+  },
+  {
+   "chart_name": "Login",
+   "label": "Login Trend"
+  },
+  {
+   "chart_name": "Stockist Trend",
+   "label": "Trend of Stockist Statement"
+  },
+  {
+   "chart_name": "Scheme Request Trend",
+   "label": "Trend of Schemes"
+  }
+ ],
+ "content": "[{\"id\":\"QL8aGTIUmR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h3\\\">Visualize, Analyze and gain insights</span>\",\"col\":12}},{\"id\":\"E9WkNSC1sc\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Login Trend\",\"col\":12}},{\"id\":\"5cL1DwpaEP\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Trend of Schemes\",\"col\":12}},{\"id\":\"MNqvVH_hke\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Trend of Stockist Statement\",\"col\":12}},{\"id\":\"loVksDNcGC\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Trend of Products\",\"col\":12}}]",
+ "creation": "2025-12-09 07:08:39.700017",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "chart",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Insights",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2025-12-26 11:06:41.705807",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Insights",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "Scanify",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 33.0,
+ "shortcuts": [],
+ "title": "Insights",
+ "type": "Workspace"
+}

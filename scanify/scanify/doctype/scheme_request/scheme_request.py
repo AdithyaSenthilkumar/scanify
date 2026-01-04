@@ -28,36 +28,61 @@ class SchemeRequest(Document):
     # REMOVED: validate_attachments method - attachments are now optional
     
     def validate_monthly_doctor_limit(self):
-        """Validate that a doctor can have maximum 3 scheme requests per month"""
-        if not self.doctor_code or not self.application_date:
+        """Validate that a doctor can have maximum 3 requests per product per month"""
+        if not self.doctor_code or not self.application_date or not self.items:
             return
         
-        # Get first and last day of the month for the application date
         app_date = getdate(self.application_date)
         first_day = get_first_day(app_date)
         last_day = get_last_day(app_date)
-        
-        # Count existing scheme requests for this doctor in this month
-        # Exclude current document if updating
-        filters = {
+        month_name = app_date.strftime("%B %Y")
+
+        # Get all submitted scheme requests for this doctor in current month
+        existing_requests = frappe.db.sql("""
+            SELECT sri.product_code, COUNT(DISTINCT sr.name) as request_count
+            FROM `tabScheme Request` sr
+            INNER JOIN `tabScheme Request Item` sri ON sr.name = sri.parent
+            WHERE sr.doctor_code = %(doctor_code)s
+            AND sr.application_date BETWEEN %(first_day)s AND %(last_day)s
+            AND sr.docstatus != 2
+            {exclude_current}
+            GROUP BY sri.product_code
+        """.format(
+            exclude_current="AND sr.name != %(current_name)s" if not self.is_new() else ""
+        ), {
             "doctor_code": self.doctor_code,
-            "application_date": ["between", [first_day, last_day]],
-            "docstatus": ["!=", 2]  # Exclude cancelled documents
-        }
+            "first_day": first_day,
+            "last_day": last_day,
+            "current_name": self.name if not self.is_new() else ""
+        }, as_dict=True)
         
-        if not self.is_new():
-            filters["name"] = ["!=", self.name]
+        # Build a dict of product_code -> count
+        product_request_counts = {row.product_code: row.request_count for row in existing_requests}
         
-        existing_count = frappe.db.count("Scheme Request", filters=filters)
+        # Check each product in current request
+        violations = []
+        for item in self.items:
+            if not item.product_code:
+                continue
+            
+            current_count = product_request_counts.get(item.product_code, 0)
+            
+            # If this product already has 3+ requests this month, reject
+            if current_count >= 3:
+                product_name = frappe.db.get_value("Product Master", item.product_code, "product_name") or item.product_code
+                violations.append(
+                    f"• <b>{product_name} ({item.product_code})</b>: Already has {current_count} requests this month"
+                )
         
-        if existing_count >= 3:
-            month_name = app_date.strftime("%B %Y")
+        if violations:
             frappe.throw(
-                f"Maximum limit reached: Doctor {self.doctor_name} ({self.doctor_code}) "
-                f"already has {existing_count} scheme request(s) in {month_name}. "
-                f"Only 3 requests are allowed per doctor per month.",
-                title="Monthly Limit Exceeded"
+                f"<b>Product-wise Monthly Limit Exceeded for Dr. {self.doctor_name} ({self.doctor_code})</b><br><br>"
+                f"The following products already have 3 or more requests in <b>{month_name}</b>:<br><br>"
+                + "<br>".join(violations) +
+                f"<br><br><i>Maximum 3 requests per product per doctor per month allowed.</i>",
+                title="Monthly Product Limit Exceeded"
             )
+    
     
     def on_submit(self):
         if self.approval_status == "Approved":
@@ -83,7 +108,34 @@ class SchemeRequest(Document):
         except Exception as e:
             frappe.log_error(frappe.get_traceback(), "Create Stock Adjustment Error")
 
+    def before_save(self):
+        """Calculate scheme percentages before saving"""
+        for item in self.items:
+            scheme_pct = 0
+            
+            # If special rate is provided, calculate based on rate difference
+            if item.special_rate and item.product_rate:
+                discount = flt(item.product_rate) - flt(item.special_rate)
+                if item.product_rate > 0:
+                    scheme_pct = (discount / flt(item.product_rate)) * 100
+            # Otherwise calculate based on free quantity
+            elif item.free_quantity and item.quantity:
+                scheme_pct = (flt(item.free_quantity) / flt(item.quantity)) * 100
+            
+            item.scheme_percentage = scheme_pct
+            
+            # Recalculate product value
+            rate = item.special_rate if item.special_rate else item.product_rate
+            item.product_value = flt(item.quantity) * flt(rate)
 
+
+@frappe.whitelist()
+def create_stock_adjustment(doc, method=None):
+    """Create stock adjustment entry when scheme is approved"""
+    # This is called via hooks on_submit
+    # Add your stock adjustment logic here if needed
+    # For now, just pass to avoid the error
+    pass
 # NEW: Repeat Request Functionality
 @frappe.whitelist()
 def repeat_scheme_request(source_name):
@@ -107,24 +159,6 @@ def repeat_scheme_request(source_name):
                 title="Invalid Status"
             )
         
-        # Validate monthly limit before creating new request
-        first_day = get_first_day(getdate())
-        last_day = get_last_day(getdate())
-        
-        existing_count = frappe.db.count("Scheme Request", filters={
-            "doctor_code": source_doc.doctor_code,
-            "application_date": ["between", [first_day, last_day]],
-            "docstatus": ["!=", 2]
-        })
-        
-        if existing_count >= 3:
-            month_name = datetime.now().strftime("%B %Y")
-            frappe.throw(
-                f"Cannot repeat request: Doctor {source_doc.doctor_name} "
-                f"already has {existing_count} scheme request(s) in {month_name}. "
-                f"Maximum 3 requests allowed per doctor per month.",
-                title="Monthly Limit Exceeded"
-            )
         
         # Create new document
         new_doc = frappe.new_doc("Scheme Request")

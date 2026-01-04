@@ -1,0 +1,8 @@
+{
+  "js/scanify.bundle.js": [
+    "public/js/scanify.js"
+  ],
+  "css/scanify.bundle.css": [
+    "public/css/scanify.css"
+  ]
+}

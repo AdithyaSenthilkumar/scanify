@@ -4,17 +4,16 @@
  "creation": "2025-11-29 08:00:00.000000",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "fieldorder": [
+"fieldorder": [
     "request_details_section",
+
     "application_date",
     "requested_by",
-    "column_break_zxwe",
-    "team",
-    "region",
-    "hq_stockist_section",
-    "hq",
-    "stockist_code",
-    "stockist_name",
+
+    "region",                
+    "hq",                    
+    "team",                 
+
     "doctor_details_section",
     "search_doctor",
     "doctor_code",
@@ -23,24 +22,32 @@
     "column_break_qwer",
     "specialization",
     "city_pool",
-    "hospital_clinic",
-    "products_section",
+    "hospital_address",
+
+    "hq_stockist_section",   
+    "stockist_code",
+    "stockist_name",
+
+    "products_section",      
     "items",
     "section_break_tyui",
     "total_scheme_value",
     "column_break_ghbn",
     "approval_status",
     "scheme_notes",
-    "attachments_section",
+
+    "attachments_section",   
     "proof_attachment_1",
     "proof_attachment_2",
     "column_break_vbnm",
     "proof_attachment_3",
     "proof_attachment_4",
-    "approval_section",
+
+    "approval_section",       
     "approval_log",
+
     "amended_from"
-  ],
+],
   "fields": [
     {
       "default": "Today",
@@ -62,16 +69,14 @@
       "fieldname": "team",
       "fieldtype": "Link",
       "label": "Team",
-      "options": "Team Master",
-      "read_only": 1
-    },
+      "options": "Team Master"
+        },
     {
       "fieldname": "region",
       "fieldtype": "Link",
       "label": "Region",
-      "options": "Region Master",
-      "read_only": 1
-    },
+      "options": "Region Master"
+        },
     {
       "fieldname": "search_doctor",
       "fieldtype": "Data",
@@ -108,8 +113,8 @@
       "read_only": 1
     },
     {
-      "fetch_from": "doctor_code.hospital_clinic",
-      "fieldname": "hospital_clinic",
+      "fetch_from": "doctor_code.hospital_address",
+      "fieldname": "hospital_address",
       "fieldtype": "Data",
       "label": "Hospital/Clinic",
       "read_only": 1

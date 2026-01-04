@@ -13,6 +13,7 @@
   "free_quantity",
   "product_rate",
   "special_rate",
+  "scheme_percentage",
   "product_value"
  ],
  "fields": [
@@ -65,6 +66,14 @@
    "fieldtype": "Currency",
    "label": "Special Rate (if any)"
   },
+  {
+    "fieldname": "scheme_percentage",
+    "fieldtype": "Percent",
+    "label": "Scheme %",
+    "readonly": 1,
+    "in_list_view": 1,
+    "precision": 2
+},
   {
    "fieldname": "product_value",
    "fieldtype": "Currency",
