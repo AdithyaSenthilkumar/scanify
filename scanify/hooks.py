@@ -6,21 +6,18 @@ app_email = "admin@stedman.com"
 app_license = "mit"
 
 # Include CSS and JS
-app_include_css = "/assets/scanify/css/scanify.css"
 app_include_js = "/assets/scanify/js/scanify.js"
-
+app_include_css = "/assets/scanify/css/scanify.css"
+#web_include_js = [
+#    "scanify/public/js/login_redirect.js"
+#]
 # Workspace and branding
 website_context = {
     "brand_html": "<img src='/assets/scanify/images/stedman_logo.png' style='max-height: 40px;' />"
 }
 
-# Default home page after login
-website_route_rules = [
-    {"from_route": "/desk", "to_route": "/desk/scanify"}
-]
 
 # Redirect after login
-on_session_creation = "scanify.auth.on_session_creation"
 
 # Document hooks
 doc_events = {

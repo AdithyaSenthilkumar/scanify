@@ -105,37 +105,45 @@
       "fieldname": "items",
       "fieldtype": "Table",
       "label": "Statement Items",
-      "options": "Stockist Statement Item"
+      "options": "Stockist Statement Item",
+      "allow_on_submit": 1
     },
     {
       "fieldname": "total_opening_value",
       "fieldtype": "Currency",
       "label": "Total Opening Value",
-      "read_only": 1
+      "read_only": 1,
+        "allow_on_submit": 1
     },
     {
       "fieldname": "total_purchase_value",
       "fieldtype": "Currency",
       "label": "Total Purchase Value",
-      "read_only": 1
+      "read_only": 1,
+        "allow_on_submit": 1
     },
     {
       "fieldname": "total_free_value",
       "fieldtype": "Currency",
       "label": "Total Free Value",
-      "read_only": 1
+      "read_only": 1,
+      "allow_on_submit": 1
+
     },
     {
       "fieldname": "total_sales_value",
       "fieldtype": "Currency",
       "label": "Total Sales Value",
-      "read_only": 1
+      "read_only": 1,
+        "allow_on_submit": 1
     },
     {
       "fieldname": "total_closing_value",
       "fieldtype": "Currency",
       "label": "Total Closing Value",
-      "read_only": 1
+      "read_only": 1,
+      "allow_on_submit": 1
+
     },
     {
       "fieldname": "amended_from",
@@ -172,7 +180,7 @@
     {
       "fieldname": "totals_section",
       "fieldtype": "Section Break",
-      "label": "Totals"
+      "label": "Total"
     },
     {
       "fieldname": "column_break_tyui",

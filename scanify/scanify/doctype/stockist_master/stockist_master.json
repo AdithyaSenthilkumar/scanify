@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:stockist_code",
+"autoname": "format:S{####}",
  "creation": "2025-11-28 22:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -24,14 +24,14 @@
   "status"
  ],
  "fields": [
-  {
-   "fieldname": "stockist_code",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Stockist Code",
-   "reqd": 1,
-   "unique": 1
-  },
+{
+  "fieldname": "stockist_code",
+  "fieldtype": "Data",
+  "label": "Stockist Code",
+  "read_only": 1,
+  "unique": 1,
+  "in_list_view": 1
+},
   {
    "fieldname": "stockist_name",
    "fieldtype": "Data",
@@ -48,20 +48,20 @@
    "reqd": 1
   },
   {
-   "fetch_from": "hq.team",
    "fieldname": "team",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Team",
    "options": "Team Master",
-   "read_only": 1
+   "reqd": 1
   },
   {
-   "fetch_from": "hq.region",
    "fieldname": "region",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Region",
    "options": "Region Master",
-   "read_only": 1
+   "reqd": 1
   },
   {
    "fetch_from": "hq.city_pool",
@@ -122,11 +122,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-01 08:19:48.041460",
+ "modified": "2025-12-12 18:34:06.896939",
  "modified_by": "Administrator",
  "module": "Scanify",
  "name": "Stockist Master",
- "naming_rule": "By fieldname",
+ "naming_rule": "",
  "owner": "Administrator",
  "permissions": [
   {

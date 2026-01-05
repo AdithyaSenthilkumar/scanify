@@ -1,0 +1,89 @@
+{
+ "app": "scanify",
+ "charts": [],
+ "content": "[{\"id\":\"Rcr_-UgoHq\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h3\\\">Generate Powerful Reports with filters and export options</span>\",\"col\":12}},{\"id\":\"u30OEu3Gbi\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"gwL45KPdo2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Secondary Sales Report (Region/HQ/Team-Wise)\",\"col\":12}},{\"id\":\"WCZVM_7eKn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Product-Wise Moving Trend Report\",\"col\":12}},{\"id\":\"-gIj-cZkFk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Stockist - Wise Performance Report\",\"col\":12}},{\"id\":\"idsGzCW2KP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Incentive Calculation Report\",\"col\":12}},{\"id\":\"s6-sa52VUU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Ranking Sheet Report (Top Achievers)\",\"col\":12}},{\"id\":\"KMr1JWw_2t\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Scheme Approved Products - Not reflected Report\",\"col\":12}},{\"id\":\"kpa-9xL0KB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Doctor-Wise Scheme Summary Report\",\"col\":12}}]",
+ "creation": "2025-12-09 06:55:40.195267",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "monitor-check",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Reports",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2025-12-26 11:06:54.014525",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Reports",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "Scanify",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 32.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Stockist - Wise Performance Report",
+   "link_to": "Stockist Performance Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Scheme Approved Products - Not reflected Report",
+   "link_to": "Scheme Not Reflected Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Secondary Sales Report (Region/HQ/Team-Wise)",
+   "link_to": "Secondary Sales Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Doctor-Wise Scheme Summary Report",
+   "link_to": "Doctor Scheme Summary Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Product-Wise Moving Trend Report",
+   "link_to": "Product Moving Trend Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Incentive Calculation Report",
+   "link_to": "Incentive Calculation Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "\u2714\ufe0f Ranking Sheet Report (Top Achievers)",
+   "link_to": "Ranking Sheet Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Reports",
+ "type": "Workspace"
+}

@@ -17,13 +17,66 @@ from google.api_core.exceptions import ResourceExhausted
 import re
 from difflib import SequenceMatcher
 
-GEMINI_API_KEY = "AIzaSyBT5OH6cAQ0oLNKYTmRENCoJDtzbivgeLE"
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+def get_gemini_settings():
+    """
+    Fetch Gemini API settings from Scanify Settings DocType
+    Returns: tuple (api_key, model_name, is_enabled)
+    """
+    try:
+        # Try to get settings - single doctype
+        settings_name = frappe.db.get_value("Scanify Settings", {"company_name": "Stedman Pharmaceuticals"}, "name")
+        
+        if not settings_name:
+            # Fallback: try getting the single record directly
+            settings_name = "Scanify Settings"
+        
+        # Fetch settings data
+        settings_data = frappe.db.get_value(
+            "Scanify Settings",
+            settings_name,
+            ["enable_gemini", "gemini_model_name"],
+            as_dict=True
+        )
+        
+        if not settings_data:
+            frappe.throw(_("Scanify Settings not found. Please create it first."))
+        
+        # Check if Gemini is enabled
+        if not settings_data.get("enable_gemini"):
+            frappe.throw(_("Gemini AI extraction is not enabled in Scanify Settings"))
+        
+        # Get API key
+        api_key = frappe.utils.password.get_decrypted_password(
+            "Scanify Settings",
+            settings_name,
+            "gemini_api_key"
+        )
+        
+        if not api_key:
+            frappe.throw(_("Gemini API key not configured in Scanify Settings"))
+        
+        # Get model name with fallback
+        model_name = settings_data.get("gemini_model_name") or "gemini-2.5-flash"
+        
+        frappe.logger().info(f"✅ Gemini settings loaded: Model={model_name}")
+        
+        return api_key, model_name, True
+        
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Gemini Settings Error")
+        frappe.throw(_("Error fetching Gemini settings: {0}").format(str(e)))
+
+        
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Gemini Settings Error")
+        frappe.throw(_("Error fetching Gemini settings: {0}").format(str(e)))
 
 @frappe.whitelist()
 def extract_stockist_statement(doc_name, file_url):
     """Extract stockist statement data using Gemini AI - TWO STAGE APPROACH"""
+    api_key, model_name, is_enabled = get_gemini_settings()
+        
+    genai.configure(api_key=api_key)
     doc = None
     try:
         doc = frappe.get_doc("Stockist Statement", doc_name)
@@ -42,7 +95,7 @@ def extract_stockist_statement(doc_name, file_url):
             raise FileNotFoundError(f"File not found: {file_url}")
 
         # STAGE 1: Extract raw data WITHOUT product list (reduces tokens massively)
-        extracted_data = call_gemini_extraction_two_stage(file_path, doc.stockist_code)
+        extracted_data = call_gemini_extraction_two_stage(file_path, doc.stockist_code,model_name)
 
         if not extracted_data or len(extracted_data) == 0:
             doc.extracted_data_status = "Failed"
@@ -114,15 +167,16 @@ def extract_stockist_statement(doc_name, file_url):
         }
 
 
-def call_gemini_extraction_two_stage(file_path, stockist_code):
+def call_gemini_extraction_two_stage(file_path, stockist_code,  model_name=None):
     """
     TWO-STAGE EXTRACTION:
     Stage 1: Extract raw product data without sending product list (saves massive tokens)
     Stage 2: Match extracted products to product codes locally (no API call)
     """
 
-    if not GEMINI_API_KEY:
-        frappe.throw("Gemini API key not configured. Please set 'gemini_api_key' in site_config.json")
+    if not model_name:
+        api_key, model_name, is_enabled = get_gemini_settings()
+        genai.configure(api_key=api_key)
 
     try:
         # Get product master for Stage 2 matching (but DON'T send to Gemini)
@@ -181,8 +235,8 @@ NO MARKDOWN, NO EXPLANATION — ONLY VALID JSON.
 
 """
 
-        # Process based on file type with RETRY and EXPONENTIAL BACKOFF
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        frappe.logger().info(f"🤖 Using Gemini model: {model_name}")
+        model = genai.GenerativeModel(model_name)
         max_retries = 3
         base_delay = 2  # seconds
 
@@ -1052,7 +1106,7 @@ def search_doctors(search_term):
                 doctor_name,
                 place,
                 specialization,
-                hospital_clinic,
+                hospital_address,
                 city_pool,
                 team,
                 region
@@ -1542,3 +1596,120 @@ def export_to_excel_incentive(records, filters):
         "message": "Report generated successfully",
         "file_url": f"/files/{filename}"
     }
+@frappe.whitelist()
+def get_doctor_history_for_scheme(doctor_code, hq=None):
+    """
+    Get historical data for a doctor in scheme context
+    Shows all past scheme requests for this doctor
+    """
+    try:
+        from frappe.utils import getdate, add_months
+        import json
+        
+        # Get doctor details
+        doctor = frappe.get_doc("Doctor Master", doctor_code)
+        
+        # Build filters
+        filters = {
+            "docstatus": ("!=", 2),  # Not cancelled
+            "doctor_code": doctor_code
+        }
+        
+        if hq:
+            filters["hq"] = hq
+        
+        # Get past scheme requests for this doctor (last 12 months)
+        twelve_months_ago = add_months(getdate(), -12)
+        schemes = frappe.db.sql("""
+            SELECT 
+                sr.name,
+                sr.application_date,
+                sr.stockist_name,
+                sr.hq,
+                sr.approval_status,
+                sr.total_scheme_value,
+                COUNT(sri.name) as product_count
+            FROM `tabScheme Request` sr
+            LEFT JOIN `tabScheme Request Item` sri ON sr.name = sri.parent
+            WHERE sr.doctor_code = %(doctor_code)s
+                AND sr.docstatus != 2
+                AND sr.application_date >= %(twelve_months_ago)s
+            GROUP BY sr.name
+            ORDER BY sr.application_date DESC
+            LIMIT 20
+        """, {
+            "doctor_code": doctor_code,
+            "twelve_months_ago": twelve_months_ago
+        }, as_dict=True)
+        
+        # Calculate aggregates
+        total_schemes = len(schemes)
+        total_approved = len([s for s in schemes if s.approval_status == "Approved"])
+        total_pending = len([s for s in schemes if s.approval_status == "Pending"])
+        total_rejected = len([s for s in schemes if s.approval_status == "Rejected"])
+        total_value = sum([flt(s.total_scheme_value or 0) for s in schemes])
+        
+        last_scheme_date = schemes[0].application_date if schemes else None
+        
+        # Get product-wise breakdown
+        product_summary = frappe.db.sql("""
+            SELECT 
+                sri.product_code,
+                sri.product_name,
+                SUM(sri.quantity) as total_quantity,
+                SUM(sri.free_quantity) as total_free_quantity,
+                SUM(sri.product_value) as total_value,
+                COUNT(DISTINCT sr.name) as scheme_count
+            FROM `tabScheme Request` sr
+            INNER JOIN `tabScheme Request Item` sri ON sr.name = sri.parent
+            WHERE sr.doctor_code = %(doctor_code)s
+                AND sr.approval_status = 'Approved'
+                AND sr.application_date >= %(twelve_months_ago)s
+            GROUP BY sri.product_code
+            ORDER BY total_value DESC
+            LIMIT 10
+        """, {
+            "doctor_code": doctor_code,
+            "twelve_months_ago": twelve_months_ago
+        }, as_dict=True)
+        
+        # Get monthly trend data (last 6 months)
+        six_months_ago = add_months(getdate(), -6)
+        chart_data = frappe.db.sql("""
+            SELECT 
+                DATE_FORMAT(sr.application_date, '%%Y-%%m') as month,
+                COUNT(sr.name) as scheme_count,
+                SUM(sr.total_scheme_value) as total_value
+            FROM `tabScheme Request` sr
+            WHERE sr.doctor_code = %(doctor_code)s
+                AND sr.approval_status = 'Approved'
+                AND sr.application_date >= %(six_months_ago)s
+            GROUP BY DATE_FORMAT(sr.application_date, '%%Y-%%m')
+            ORDER BY month DESC
+        """, {
+            "doctor_code": doctor_code,
+            "six_months_ago": six_months_ago
+        }, as_dict=True)
+        
+        return {
+            "success": True,
+            "doctor_code": doctor.doctor_code,
+            "doctor_name": doctor.doctor_name,
+            "place": doctor.place or "N/A",
+            "specialization": doctor.specialization or "General",
+            "hospital_address": doctor.hospital_address or "N/A",
+            "city_pool": doctor.city_pool or "N/A",
+            "total_schemes": total_schemes,
+            "total_approved": total_approved,
+            "total_pending": total_pending,
+            "total_rejected": total_rejected,
+            "total_value": total_value,
+            "last_scheme_date": last_scheme_date.strftime("%Y-%m-%d") if last_scheme_date else None,
+            "recent_schemes": schemes,
+            "product_summary": product_summary,
+            "chart_data": chart_data
+        }
+        
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Get Doctor History Error")
+        return {"success": False, "message": str(e)}

@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:hq_name",
- "creation": "2025-11-28 22:00:00.000000",
+ "creation": "2025-11-28 22:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -29,12 +29,12 @@
    "reqd": 1
   },
   {
-   "fetch_from": "team.region",
    "fieldname": "region",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Region",
    "options": "Region Master",
-   "read_only": 1
+   "reqd": 1
   },
   {
    "fieldname": "city_pool",
@@ -51,7 +51,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-28 22:00:00.000000",
+ "modified": "2025-12-12 18:34:47.070199",
  "modified_by": "Administrator",
  "module": "Scanify",
  "name": "HQ Master",
@@ -71,6 +71,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

@@ -7,7 +7,7 @@
   }
  ],
  "content": "[{\"id\":\"prwefWW1iO\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Manage scheme requests, approvals, doctor schemes, and allocations</span>\",\"col\":12}},{\"id\":\"6jTO6cGqLR\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b><i>Quick Links</i></b>\",\"col\":12}},{\"id\":\"c3qFq02Wyi\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2795 New Scheme Request\",\"col\":4}},{\"id\":\"R3ZI677vyS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u2714\ufe0f Pending Approvals\",\"col\":4}},{\"id\":\"HpxaYHg2Re\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"View All Scheme Requests\",\"col\":4}},{\"id\":\"fV0OigCQRi\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Scheme Request Trend\",\"col\":12}},{\"id\":\"AljHktvGe3\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Scheme Request History\",\"col\":4}},{\"id\":\"AE0rKDOZuv\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Pending Requests\",\"col\":4}},{\"id\":\"tNov6-I1xV\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Rejected Requests\",\"col\":4}}]",
- "creation": "2025-12-01 09:13:41.890154",
+ "creation": "2025-12-26 17:26:21.606610",
  "custom_blocks": [],
  "docstatus": 0,
  "doctype": "Workspace",

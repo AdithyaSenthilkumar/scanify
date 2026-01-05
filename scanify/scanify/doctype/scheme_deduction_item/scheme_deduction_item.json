@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "creation": "2025-12-26 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "product_code",
+  "product_name",
+  "pack",
+  "column_break_1",
+  "scheme_free_qty",
+  "current_free_qty",
+  "column_break_deduct",
+  "deduct_qty",
+  "column_break_2",
+  "pts",
+  "deducted_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "product_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product Code",
+   "options": "Product Master",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "product_code.product_name",
+   "fieldname": "product_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Product Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "product_code.pack",
+   "fieldname": "pack",
+   "fieldtype": "Data",
+   "label": "Pack",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Free qty from scheme request",
+   "fieldname": "scheme_free_qty",
+   "fieldtype": "Float",
+   "label": "Scheme Free Qty",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "Current free qty in stockist statement",
+   "fieldname": "current_free_qty",
+   "fieldtype": "Float",
+   "label": "Current Free Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_deduct",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "deduct_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty to Deduct",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "product_code.pts",
+   "fieldname": "pts",
+   "fieldtype": "Currency",
+   "label": "PTS Rate",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "deducted_value",
+   "fieldtype": "Currency",
+   "label": "Deducted Value",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-12-26 17:00:00",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Scheme Deduction Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
