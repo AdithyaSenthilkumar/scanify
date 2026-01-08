@@ -1,0 +1,112 @@
+{
+ "app": "scanify",
+ "creation": "2026-01-08 06:47:24.404741",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "wrench",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "home",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "Scanify",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "calendar-cog",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Secondary Sales",
+   "link_to": "Stockists",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "calendar-check-2",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Schemes",
+   "link_to": "Schemes",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "pen-tool",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Vektra Division",
+   "link_to": "Vektra",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "bolt",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Masters",
+   "link_to": "Masters",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "monitor-check",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Reports",
+   "link_to": "Reports",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "chart",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Insights",
+   "link_to": "Insights",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "list-alt",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Users",
+   "link_to": "Users",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-01-08 07:02:27.207766",
+ "modified_by": "Administrator",
+ "module": "Scanify",
+ "name": "Prima",
+ "owner": "Administrator",
+ "title": "Prima"
+}
